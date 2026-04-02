@@ -49,11 +49,8 @@ class Basics(helpers.BaseTestCase):
         result, output = helpers.run_tests_in_module(self, FakeModule)
         self.assertTestResult(result, testsRun=1, numFailures=0, numErrors=0, numSkipped=0)
         self.assertTrue(result.wasSuccessful())
-        # FIXME: This should be "test_func_fail", but the existing
-        # implementation pulls the wrong name
-        self.assertEqual(output, f"test_exp_fail ({self.full_test_name()}) ... ok\n")
+        self.assertEqual(output, f"test_func_fail ({self.full_test_name()}) ... ok\n")
 
-    @unittest.skip("expectedFailure incorrectly consumes all failure types")
     def test_bare_function__expect_failure__error(self):
         class FakeModule:
             @unittest.expectedFailure
@@ -65,7 +62,6 @@ class Basics(helpers.BaseTestCase):
         self.assertFalse(result.wasSuccessful())
         self.assertEqual(output, f"test_func_error ({self.full_test_name()}) ... ERROR\n")
 
-    @unittest.skip("expectedFailure incorrectly consumes the SkipTest exception")
     def test_bare_function__expect_failure__skip(self):
         class FakeModule:
             @unittest.expectedFailure
@@ -80,7 +76,6 @@ class Basics(helpers.BaseTestCase):
             output, f"test_func_error ({self.full_test_name()}) ... skipped: reason1\n"
         )
 
-    @unittest.skip("expectedFailure incorrectly consumes the SkipTest exception")
     def test_testcase__expect_failure__skip(self):
         class FakeModule:
             class Test(unittest.TestCase):
@@ -138,7 +133,6 @@ class TestTestCase(helpers.BaseTestCase):
         self.assertTestResult(result, testsRun=1, numFailures=0, numErrors=1, numSkipped=0)
         self.assertEqual(output, f"test1 ({self.full_test_name()}.Test) ... ERROR\n")
 
-    @unittest.skip("unittest framework incorrectly calls `Test.test3`")
     def test_only_calls_methods(self):
         class FakeModule:
             class Test(unittest.TestCase):
@@ -168,10 +162,6 @@ class TestTestCase(helpers.BaseTestCase):
 
                 def runTest(self):
                     pass
-
-                def __repr__(self):
-                    # FIXME: Remove this method, it should not be needed
-                    return "runTest"
 
         result, output = helpers.run_tests_in_module(self, FakeModule)
         self.assertTestResult(result, testsRun=1, numFailures=0, numErrors=0, numSkipped=0)
@@ -205,7 +195,6 @@ class TestTestCase(helpers.BaseTestCase):
             f"test3 ({self.full_test_name()}.Test) ... FAIL\n",
         )
 
-    @unittest.skip("Exceptions/Assertions in setUp are not caught")
     def test_setup__failure_skips_test(self):
         class FakeModule:
             class Test(unittest.TestCase):
@@ -228,7 +217,6 @@ class TestTestCase(helpers.BaseTestCase):
         self.assertFalse(result.wasSuccessful())
         self.assertEqual(output, f"test ({self.full_test_name()}.Test) ... FAIL\n")
 
-    @unittest.skip("Exceptions/Assertions in setUp are not caught")
     def test_setup__errors_skips_test(self):
         class FakeModule:
             class Test(unittest.TestCase):
@@ -282,7 +270,6 @@ class TestTestCase(helpers.BaseTestCase):
         with self.assertRaises(KeyboardInterrupt):
             helpers.run_tests_in_module(self, FakeModule)
 
-    @unittest.skip("unittest framework does not call `TestCase.run` method")
     def test_run_method_overridable(self):
         class FakeModule:
             class Test(unittest.TestCase):

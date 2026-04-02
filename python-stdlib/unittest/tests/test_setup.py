@@ -46,9 +46,6 @@ class TestUnittestSetup(unittest.TestCase):
                 "Setup called incorrect number of times", self.__class__.per_class_setup_called
             )
 
-    @unittest.skip(
-        "unittest framework incorrectly calls tests on the same instance of TestCase (so __init__ is only called once)"
-    )
     def testSetUpTearDown_2(self):
         # Test that setUp
         if self.per_instance_setup_called != 1:

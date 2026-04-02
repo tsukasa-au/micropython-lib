@@ -37,10 +37,8 @@ class Test(helpers.BaseTestCase):
         self.assertEqual(result.testsRun, 1)
         self.assertEqual(len(result.failures), 0)
         self.assertEqual(len(result.errors), 2)
-        # FIXME: unittest framework incorrectly prints the test `FAIL`ed, rather
-        # than `ERROR`ed.
         self.assertEqual(
-            output, "test (test_subtest.Test.test_subtest_catches_exceptions._Test) ... FAIL\n"
+            output, "test (test_subtest.Test.test_subtest_catches_exceptions._Test) ... ERROR\n"
         )
 
 
